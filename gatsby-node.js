@@ -23,6 +23,7 @@ exports.createPages = ({ actions, graphql }) => {
     tagsPage: path.resolve("src/templates/tags-page.js"),
     tagPosts: path.resolve("src/templates/tag-posts.js"),
     postList: path.resolve("src/templates/post-list.js"),
+    authorPosts: path.resolve("src/templates/author-posts.js"),
   }
 
   return graphql(`
@@ -85,34 +86,44 @@ exports.createPages = ({ actions, graphql }) => {
 
     //create tag posts pages
     tags.forEach(tag => {
-        createPage({
-            path: `/tag/${slugify(tag)}`,
-            component: templates.tagPosts,
-            context: {
-                tag,
-            }
-        })
+      createPage({
+        path: `/tag/${slugify(tag)}`,
+        component: templates.tagPosts,
+        context: {
+          tag,
+        },
+      })
     })
 
     const postsPerPage = 2
     const numberOfPages = Math.ceil(posts.length / postsPerPage)
 
-    Array.from({ length: numberOfPages}).forEach((_, index) => {
-        const isFirstPage = index === 0
-        const currentPage = index + 1
+    Array.from({ length: numberOfPages }).forEach((_, index) => {
+      const isFirstPage = index === 0
+      const currentPage = index + 1
 
-        if(isFirstPage) return 
+      if (isFirstPage) return
 
-        createPage({
-            path: `page/${currentPage}`,
-            component: templates.postList,
-            context: {
-                limit: postsPerPage,
-                skip: index * postsPerPage,
-                currentPage,
-                numberOfPages
-            }
-        })
+      createPage({
+        path: `page/${currentPage}`,
+        component: templates.postList,
+        context: {
+          limit: postsPerPage,
+          skip: index * postsPerPage,
+          currentPage,
+          numberOfPages,
+        },
+      })
+    })
+    authors.forEach(author => {
+      createPage({
+        path: `/author/${slugify(author.name)}`,
+        component: templates.authorPosts,
+        context: {
+          authorName: author.name,
+          imageUrl: author.imageUrl,
+        },
+      })
     })
   })
 }

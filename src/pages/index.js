@@ -8,7 +8,7 @@ import PaginationLinks from "../components/paginationLinks"
 
 const IndexPage = () => {
   const postsPerPage = 2
-  
+
   const data = useStaticQuery(graphql`
     query {
       allMarkdownRemark(
