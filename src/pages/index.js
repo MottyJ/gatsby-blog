@@ -4,8 +4,6 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { graphql, useStaticQuery } from "gatsby"
 import Post from "../components/post"
-import { Row, Col } from "reactstrap"
-import Sidebar from "../components/sidebar"
 
 const IndexPage = () => {
   const data = useStaticQuery(graphql`
@@ -37,11 +35,8 @@ const IndexPage = () => {
     }
   `)
   return (
-    <Layout>
+    <Layout pageTitle="gajitt">
       <SEO title="Home" />
-      <h1>Home page</h1>
-      <Row>
-        <Col md="8">
           <div>
             {data.allMarkdownRemark.edges.map(({ node }) => (
               <Post
@@ -56,11 +51,6 @@ const IndexPage = () => {
               />
             ))}
           </div>
-        </Col>
-        <Col md="4">
-          <Sidebar />
-        </Col>
-      </Row>
     </Layout>
   )
 }
