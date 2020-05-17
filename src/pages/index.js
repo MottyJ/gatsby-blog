@@ -4,14 +4,18 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { graphql, useStaticQuery } from "gatsby"
 import Post from "../components/post"
+import PaginationLinks from "../components/paginationLinks"
 
 const IndexPage = () => {
+  const postsPerPage = 2
+  
   const data = useStaticQuery(graphql`
     query {
       allMarkdownRemark(
         sort: { fields: [frontmatter___date], order: DESC }
         limit: 2
       ) {
+        totalCount
         edges {
           node {
             id
@@ -37,6 +41,9 @@ const IndexPage = () => {
       }
     }
   `)
+  let numberOfPages = Math.ceil(
+    data.allMarkdownRemark.totalCount / postsPerPage
+  )
   return (
     <Layout pageTitle="gajitt">
       <SEO title="Home" />
@@ -53,6 +60,7 @@ const IndexPage = () => {
             tags={node.frontmatter.tags}
           />
         ))}
+        <PaginationLinks currentPage={1} numberOfPages={numberOfPages} />
       </div>
     </Layout>
   )
